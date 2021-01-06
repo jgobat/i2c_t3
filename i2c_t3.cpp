@@ -770,6 +770,22 @@ size_t i2c_t3::requestFrom_(struct i2cStruct* i2c, uint8_t bus, uint8_t addr, si
         return 0; // NAK, timeout or bus error
 }
 
+uint8_t i2c_t3::requestFrom(uint8_t addr, uint8_t qty, uint32_t iaddr, uint8_t n, uint8_t stop)
+{
+    if (n > 0) {
+        union { uint32_t ul; uint8_t b[4]; } iaddress;
+        iaddress.ul = iaddr;
+        beginTransmission(addr);
+        if (n > 3) n = 3;
+        do {
+            n = n - 1;
+            write(iaddress.b[n]);
+        } while (n > 0);
+        endTransmission(false);
+    }
+    if (qty > I2C_RX_BUFFER_LENGTH) qty = I2C_RX_BUFFER_LENGTH;
+    return requestFrom_(i2c, bus, addr, (size_t) qty, (i2c_stop) stop, 0);
+}
 
 // ------------------------------------------------------------------------------------------------------
 // Start Master Receive - non-blocking routine, starts request for length bytes from slave at address. Receive

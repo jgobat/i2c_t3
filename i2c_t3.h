@@ -797,7 +797,7 @@ public:
         { return requestFrom_(i2c, bus, (uint8_t)addr, (size_t)len, I2C_STOP, 0); } // Wire compatibility
     inline uint8_t requestFrom(uint8_t addr, uint8_t len, uint8_t sendStop=1)
         { return (uint8_t)requestFrom_(i2c, bus, addr, (size_t)len, (i2c_stop)sendStop, 0); } // Wire compatibility
-
+    uint8_t requestFrom(uint8_t addr, uint8_t qty, uint32_t iaddr, uint8_t n, uint8_t stop); // Wire compatibility
     // ------------------------------------------------------------------------------------------------------
     // Start Master Receive (base routine)
     //
